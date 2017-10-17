@@ -18,9 +18,9 @@ def remove_punct(text):
     'goSouTh'
     """
     punctuation_free = ""
-    for i in text:
-        if i not in string.punctuation:
-            punctuation_free += i
+    for char in text:
+        if char not in string.punctuation:
+            punctuation_free += char
     return punctuation_free
             
     
