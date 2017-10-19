@@ -125,6 +125,7 @@ def print_room(room):
 
     Note: <BLANKLINE> here means that doctest should expect a blank line.
     """
+    global all_items
     items = list_of_items(room["items"])
     # Display room name
     print()
@@ -136,7 +137,8 @@ def print_room(room):
     if items != "":
         print("There is "  + items + " here.")
         print()
-
+    print("You currently have " + str(calculate_mass(all_items, inventory)) + "kg of items.")
+    print()    
     #
     # COMPLETE ME!
     #
@@ -207,10 +209,6 @@ def print_menu(exits, room_items, inv_items):
     for direction in exits:
         # Print the exit name and where it leads to
         print_exit(direction, exit_leads_to(exits, direction))
-
-    #
-    # COMPLETE ME!
-    #
     
     print("What do you want to do?")
 
@@ -243,7 +241,10 @@ def execute_go(direction):
     global current_room
     exits = (current_room["exits"])
     if is_valid_exit(exits, direction):
-        current_room = move(exits, direction)
+        if calculate_mass(all_items, inventory) <= 3.0:
+            current_room = move(exits, direction)
+        else:
+            print("You are too heavy!")
 
 def execute_take(item_id):
     """This function takes an item_id as an argument and moves this item from the
@@ -342,6 +343,14 @@ def move(exits, direction):
     # Next room to go to
     return rooms[exits[direction]]
 
+def calculate_mass(items, inventory):
+    mass = 0.0
+    for item in items:
+        if item in inventory:
+            mass += item["mass"]
+        
+    return mass
+
 
 # This is the entry point of our program
 def main():
@@ -349,6 +358,15 @@ def main():
     # Main game loop
     while True:
         # Display game status (room description, inventory etc.)
+        if current_room["name"] == "Reception":
+            total_items = 0
+            for item in all_items:
+                if item in current_room["items"]:
+                    total_items += 1
+            if total_items == len(all_items):
+                print("You win!")
+                break
+                    
         print_room(current_room)
         print_inventory_items(inventory)
 
