@@ -4,6 +4,7 @@ from map import rooms
 from player import *
 from items import *
 from gameparser import *
+import time
 
 
 
@@ -136,9 +137,7 @@ def print_room(room):
     print()
     if items != "":
         print("There is "  + items + " here.")
-        print()
-    print("You currently have " + str(calculate_mass(all_items, inventory)) + "kg of items.")
-    print()    
+        print()   
     #
     # COMPLETE ME!
     #
@@ -204,11 +203,15 @@ def print_menu(exits, room_items, inv_items):
     What do you want to do?
 
     """
+    print()
+    print("You currently have " + str(calculate_mass(all_items, inventory)) + "kg of items.")
+    print()
     print("You can:")
     # Iterate over available exits
     for direction in exits:
         # Print the exit name and where it leads to
         print_exit(direction, exit_leads_to(exits, direction))
+    
     
     print("What do you want to do?")
 
@@ -365,6 +368,7 @@ def main():
                     total_items += 1
             if total_items == len(all_items):
                 print("You win!")
+                time.sleep(5)
                 break
                     
         print_room(current_room)
